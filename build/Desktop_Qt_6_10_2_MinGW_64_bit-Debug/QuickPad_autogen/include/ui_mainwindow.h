@@ -148,7 +148,7 @@ public:
 #endif // QT_CONFIG(shortcut)
         actionSave_As->setText(QCoreApplication::translate("MainWindow", "Save As", nullptr));
 #if QT_CONFIG(shortcut)
-        actionSave_As->setShortcut(QCoreApplication::translate("MainWindow", "F12", nullptr));
+        actionSave_As->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Shift+S", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionExit->setText(QCoreApplication::translate("MainWindow", "Exit", nullptr));
 #if QT_CONFIG(shortcut)

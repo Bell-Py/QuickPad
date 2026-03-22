@@ -39,28 +39,37 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MainWindow",
-        "on_actionAbout_triggered",
-        "",
         "on_actionNew_triggered",
+        "",
+        "on_actionOpen_triggered",
+        "on_actionSave_triggered",
+        "on_actionSave_As_triggered",
         "on_actionExit_triggered",
         "on_actionCut_triggered",
         "on_actionCopy_triggered",
-        "on_actionPaste_triggered"
+        "on_actionPaste_triggered",
+        "on_actionAbout_triggered"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'on_actionAbout_triggered'
-        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionNew_triggered'
+        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_actionOpen_triggered'
         QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_actionExit_triggered'
+        // Slot 'on_actionSave_triggered'
         QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_actionCut_triggered'
+        // Slot 'on_actionSave_As_triggered'
         QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_actionCopy_triggered'
+        // Slot 'on_actionExit_triggered'
         QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_actionPaste_triggered'
+        // Slot 'on_actionCut_triggered'
         QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_actionCopy_triggered'
+        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_actionPaste_triggered'
+        QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_actionAbout_triggered'
+        QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -84,12 +93,15 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->on_actionAbout_triggered(); break;
-        case 1: _t->on_actionNew_triggered(); break;
-        case 2: _t->on_actionExit_triggered(); break;
-        case 3: _t->on_actionCut_triggered(); break;
-        case 4: _t->on_actionCopy_triggered(); break;
-        case 5: _t->on_actionPaste_triggered(); break;
+        case 0: _t->on_actionNew_triggered(); break;
+        case 1: _t->on_actionOpen_triggered(); break;
+        case 2: _t->on_actionSave_triggered(); break;
+        case 3: _t->on_actionSave_As_triggered(); break;
+        case 4: _t->on_actionExit_triggered(); break;
+        case 5: _t->on_actionCut_triggered(); break;
+        case 6: _t->on_actionCopy_triggered(); break;
+        case 7: _t->on_actionPaste_triggered(); break;
+        case 8: _t->on_actionAbout_triggered(); break;
         default: ;
         }
     }
@@ -115,14 +127,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 9;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 9)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 9;
     }
     return _id;
 }

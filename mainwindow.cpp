@@ -1,16 +1,24 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
 #include <QMessageBox>
-#include <QInputDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , isModified(false)
 {
     ui->setupUi(this);
 
+    setWindowTitle("Untitled - QuickPad");
     statusBar()->showMessage("Готово");
+
+    connect(ui->editor, &QPlainTextEdit::textChanged, this, [=]() {
+        isModified = true;
+    });
 
     connect(ui->editor, &QPlainTextEdit::cursorPositionChanged, this, [=]() {
         QTextCursor cursor = ui->editor->textCursor();
@@ -29,42 +37,112 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionAbout_triggered()
+
+bool MainWindow::maybeSave()
 {
-    QMessageBox::information(this,
-                             "About",
-                             "QuickPad\nПростий текстовий редактор\nВерсія 1.0");
+    if (!isModified)
+        return true;
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,
+                                  "Зберегти",
+                                  "Документ змінено. Зберегти?",
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+
+    if (reply == QMessageBox::Yes) {
+        on_actionSave_triggered();
+        return true;
+    }
+    else if (reply == QMessageBox::Cancel) {
+        return false;
+    }
+
+    return true;
 }
+
+void MainWindow::saveToFile(const QString &fileName)
+{
+    QFile file(fileName);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << ui->editor->toPlainText();
+        file.close();
+
+        currentFile = fileName;
+        setWindowTitle(currentFile + " - QuickPad");
+        isModified = false;
+
+        statusBar()->showMessage("Файл збережено", 2000);
+    }
+}
+
 
 void MainWindow::on_actionNew_triggered()
 {
-    bool ok;
-    QString name = QInputDialog::getText(this,
-                                         "New Document",
-                                         "Введіть назву документа:",
-                                         QLineEdit::Normal,
-                                         "",
-                                         &ok);
+    if (!maybeSave())
+        return;
 
-    if (ok && !name.isEmpty()) {
-        QMessageBox::information(this,
-                                 "Створено",
-                                 "Новий документ: " + name);
+    ui->editor->clear();
+    currentFile.clear();
+    setWindowTitle("Untitled - QuickPad");
+    isModified = false;
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    if (!maybeSave())
+        return;
+
+    QString fileName = QFileDialog::getOpenFileName(this, "Відкрити файл");
+
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        ui->editor->setPlainText(in.readAll());
+        file.close();
+
+        currentFile = fileName;
+        setWindowTitle(currentFile + " - QuickPad");
+        isModified = false;
+
+        statusBar()->showMessage("Файл відкрито", 2000);
     }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    if (currentFile.isEmpty()) {
+        on_actionSave_As_triggered();
+        return;
+    }
+
+    saveToFile(currentFile);
+}
+
+void MainWindow::on_actionSave_As_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Зберегти як");
+
+    if (fileName.isEmpty())
+        return;
+
+    saveToFile(fileName);
 }
 
 void MainWindow::on_actionExit_triggered()
 {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this,
-                                  "Exit",
-                                  "Ви впевнені, що хочете вийти?",
-                                  QMessageBox::Yes | QMessageBox::No);
+    if (!maybeSave())
+        return;
 
-    if (reply == QMessageBox::Yes) {
-        close();
-    }
+    close();
 }
+
+
 
 void MainWindow::on_actionCut_triggered()
 {
@@ -79,4 +157,13 @@ void MainWindow::on_actionCopy_triggered()
 void MainWindow::on_actionPaste_triggered()
 {
     ui->editor->paste();
+}
+
+
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox::information(this,
+                             "About",
+                             "QuickPad\nПростий текстовий редактор\nВерсія 1.0");
 }

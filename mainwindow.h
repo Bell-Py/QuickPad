@@ -18,15 +18,26 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_actionAbout_triggered();
     void on_actionNew_triggered();
+    void on_actionOpen_triggered();
+    void on_actionSave_triggered();
+    void on_actionSave_As_triggered();
     void on_actionExit_triggered();
 
     void on_actionCut_triggered();
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
 
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
+
+    QString currentFile;
+    bool isModified;
+
+    bool maybeSave();
+    void saveToFile(const QString &fileName);
 };
+
 #endif // MAINWINDOW_H
